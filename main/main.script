@@ -1,0 +1,28 @@
+local function get_data(self)
+	--
+	-- Get Save File by Path
+	--
+	self.sav = sys.get_save_file("HTML5_Saving", "save.sav")
+	if self.sav then print("Found " .. self.sav) end
+end
+
+local function load_data(self)
+	--
+	-- Load Save File
+	-- 
+	local data = sys.load(self.sav)
+	if data.time and data.score then print("Last time data : " .. data.time .. " for " .. data.score) end
+end
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	get_data(self)
+	load_data(self)
+end
+
+function on_input(self, action_id, action)
+	if action.pressed then 
+		print("saving new data...")
+		sys.save(self.sav, { time = socket.gettime(), score = socket.gettime() % 2 })
+	end
+end
